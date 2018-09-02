@@ -61,9 +61,12 @@ def processLunchMenu(menu):
     if menu:
         descriptionSize = getDescriptionSize(menu)
         for section in menu:
+            title = section['title_en'].strip()
+            title = title[0].upper() + title[1:]
+
             entries.append([
                 str(order),
-                section['title_en'], 
+                title,
                 section['price'].split('/')[0].strip(),
                 section['properties'] if 'properties' in section else '     '
             ])
