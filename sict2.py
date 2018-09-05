@@ -42,18 +42,19 @@ def getDescriptionSize(menu):
     return max([len(section['title_en']) for section in menu])
     
 def requestMenuData(sdate=''):
+    urlHandler = None
     baseUrl = 'https://www.sodexo.fi/ruokalistat/output/daily_json/54/'
     requestDate = datetime.today() if not sdate else datetime(*map(int, sdate.split('/')))
     requestUrlPattern = datetime.strftime(requestDate, '%Y/%m/%d') + '/en'
     try:
         urlHandler = urlreq.urlopen(baseUrl + requestUrlPattern)
         jsonResult = json.loads(urlHandler.read())
-        return jsonResult['courses'], datetime.strftime(requestDate, '%d/%m/%Y')
     except:
         sys.exit("Error occurred. Check your Internet connection.")
     finally:
-        urlHandler.close()
-    
+        if urlHandler: urlHandler.close()
+    return jsonResult['courses'], datetime.strftime(requestDate, '%d/%m/%Y')
+
 def processLunchMenu(menu):
     descriptionSize = 0
     entries = [['#', 'Dish', 'Cost', 'Notes']]
